@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>猫咪领养平台 - 回忆墙</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      background-color: #f5f5f5;
+      color: #333;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-bottom: 80px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #666;
+    }
+
+    .nav-item.active {
+      color: #ff6b6b;
+    }
+
+    .nav-icon {
+      margin-bottom: 5px;
+    }
+
+    .nav-text {
+      font-size: 12px;
+    }
+
+    /* 黑白主题样式 - 为已去世的猫咪 */
+    .cat-card.memorial {
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 30px;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+
+    .cat-card.memorial.visible {
+      opacity: 1;
+    }
+
+    .cat-card.memorial .cat-image {
+      filter: grayscale(100%);
+      opacity: 0.9;
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+
+    .cat-card.memorial .cat-info {
+      background-color: #f0f0f0;
+      color: #444;
+      padding: 20px;
+    }
+
+    .cat-card.memorial .cat-name {
+      color: #333;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .cat-card.memorial .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .cat-card.memorial .info-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .cat-card.memorial .info-label {
+      color: #555;
+      margin-right: 10px;
+      min-width: 80px;
+    }
+
+    .cat-card.memorial .info-value {
+      color: #444;
+      font-weight: 500;
+    }
+
+    .cat-card.memorial .cat-description {
+      color: #444;
+      margin: 20px 0;
+      line-height: 1.6;
+    }
+
+    .cat-card.memorial .action-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+      opacity: 0.8;
+    }
+
+    .cat-card.memorial .action-button {
+      padding: 12px 24px;
+      border-radius: 30px;
+      border: none;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .cat-card.memorial .primary-button {
+      background-color: #777;
+      color: white;
+      flex: 2;
+    }
+
+    .cat-card.memorial .secondary-button {
+      background-color: #ddd;
+      color: #444;
+      flex: 1;
+    }
+
+    .cat-card.memorial .memorial-badge {
+      display: inline-block;
+      background-color: #777;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    .shared-memory {
+      margin: 15px 0;
+      padding: 12px;
+      background-color: #f8f8f8;
+      border-radius: 8px;
+      border-left: 3px solid #777;
+    }
+
+    .memory-content {
+      margin: 0 0 8px 0;
+      color: #444;
+    }
+
+    .memory-time {
+      color: #888;
+      font-size: 12px;
+    }
+
+    .memorial-header {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .memorial-title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .memorial-subtitle {
+      font-size: 16px;
+      color: #666;
+    }
+
+    .memorial-intro {
+      text-align: center;
+      margin: 20px auto 40px;
+      max-width: 800px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* 花瓣动画效果 */
+    .petals-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .petal {
+      position: absolute;
+      top: -10%;
+      user-select: none;
+      cursor: default;
+      animation-name: falling;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes falling {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translate(100px, 1000px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    .flower-count {
+      margin-left: 10px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">回忆墙</div>
+    <div style="width: 40px;"></div>
+  </header>
+
+  <div class="memorial-header">
+    <h1 class="memorial-title">永恒的记忆</h1>
+    <p class="memorial-subtitle">纪念那些曾经带给我们温暖和欢乐的小生命</p>
+  </div>
+
+  <div class="memorial-intro">
+    回忆墙是为了纪念那些已经离开我们的猫咪们而设立的。它们曾经给予我们无尽的欢乐和陪伴，现在它们可能离开了我们，但永远活在我们的记忆中。通过这个平台，我们可以一起分享对它们的思念和回忆。
+  </div>
+
+  <main>
+    <div class="cat-card memorial" id="cat1">
+      <img class="cat-image"
+        src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+        alt="小黑">
+      <div class="cat-info">
+        <h1 class="cat-name">小黑 <span class="memorial-badge">已离世</span></h1>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">毛色：</span>
+            <span class="info-value">黑</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">性别：</span>
+            <span class="info-value">公</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">状况：</span>
+            <span class="info-value">已离世</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">离世时间：</span>
+            <span class="info-value">2023-09-15</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">出没地点：</span>
+            <span class="info-value">宿舍楼</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">在校时间：</span>
+            <span class="info-value">2017 - 2023</span>
+          </div>
+        </div>
+
+        <div class="cat-description">
+          小黑是一只性格有些怕生的黑猫，但是一旦熟悉了就会变得很亲近。它喜欢安静的环境，曾经是校园里最受欢迎的猫咪之一。2023年9月15日，小黑因病离世，永远离开了我们，但它的记忆将永远留在大家心中。
+        </div>
+
+        <div id="memories-container-cat1">
+          <!-- 回忆将会被动态添加到这里 -->
+        </div>
+
+        <div class="action-buttons">
+          <button class="action-button primary-button" data-cat-id="cat1">献花悼念</button>
+          <button class="action-button secondary-button" data-cat-id="cat1">分享回忆</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-card memorial" id="cat2">
+      <img class="cat-image"
+        src="https://images.unsplash.com/photo-1511044568932-338cba0ad803?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+        alt="小白">
+      <div class="cat-info">
+        <h1 class="cat-name">小白 <span class="memorial-badge">已离世</span></h1>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">毛色：</span>
+            <span class="info-value">白</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">性别：</span>
+            <span class="info-value">母</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">状况：</span>
+            <span class="info-value">已离世</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">离世时间：</span>
+            <span class="info-value">2023-01-10</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">出没地点：</span>
+            <span class="info-value">图书馆</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">在校时间：</span>
+            <span class="info-value">2018 - 2023</span>
+          </div>
+        </div>
+
+        <div class="cat-description">
+          小白是图书馆的常客，经常在学生们温习功课时安静地陪伴在旁边。它有一身洁白的毛发和蓝色的眼睛，深受师生喜爱。2023年1月初的一个雪夜，小白安详地离开了这个世界，但它留下的温暖回忆将永远存在。
+        </div>
+
+        <div id="memories-container-cat2">
+          <!-- 回忆将会被动态添加到这里 -->
+        </div>
+
+        <div class="action-buttons">
+          <button class="action-button primary-button" data-cat-id="cat2">献花悼念</button>
+          <button class="action-button secondary-button" data-cat-id="cat2">分享回忆</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 底部导航 -->
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <div class="nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </div>
+      <span class="nav-text">首页</span>
+    </a>
+    <a href="detail.html" class="nav-item">
+      <div class="nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M12 8v4l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <span class="nav-text">详情</span>
+    </a>
+    <a href="memorial.html" class="nav-item active">
+      <div class="nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <span class="nav-text">回忆墙</span>
+    </a>
+  </div>
+
+  <!-- 花瓣背景 -->
+  <div class="petals-container" id="petalsContainer"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // 花瓣飘落效果
+      function createPetals() {
+        const container = document.getElementById('petalsContainer');
+        const petalElements = [
+          '🌸', '🌺', '🌹', '🌷', '🌻', '🌼', '🍂', '🍁'
+        ];
+
+        for (let i = 0; i < 30; i++) {
+          const petal = document.createElement('div');
+          petal.className = 'petal';
+
+          // 随机选择一个花瓣元素
+          const petalType = petalElements[Math.floor(Math.random() * petalElements.length)];
+          petal.textContent = petalType;
+
+          // 随机位置
+          petal.style.left = `${Math.random() * 100}%`;
+
+          // 随机大小
+          const size = Math.random() * 20 + 20;
+          petal.style.fontSize = `${size}px`;
+
+          // 随机旋转
+          petal.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+          // 随机动画时长
+          const duration = Math.random() * 20 + 10;
+          petal.style.animationDuration = `${duration}s`;
+
+          // 随机延迟
+          const delay = Math.random() * 15;
+          petal.style.animationDelay = `${delay}s`;
+
+          container.appendChild(petal);
+        }
+      }
+
+      // 创建花瓣背景
+      createPetals();
+
+      // 卡片淡入效果
+      const memorialCards = document.querySelectorAll('.cat-card.memorial');
+      memorialCards.forEach((card, index) => {
+        setTimeout(() => {
+          card.classList.add('visible');
+        }, 300 * (index + 1));
+      });
+
+      // 处理献花和分享回忆
+      const tributeButtons = document.querySelectorAll('.primary-button');
+      const shareButtons = document.querySelectorAll('.secondary-button');
+
+      // 存储每只猫的花朵数量
+      const flowerCounts = {
+        cat1: 68,
+        cat2: 42
+      };
+
+      // 为每个献花按钮添加花朵计数器
+      tributeButtons.forEach(button => {
+        const catId = button.dataset.catId;
+        const count = flowerCounts[catId] || 0;
+
+        const flowerCountElement = document.createElement("span");
+        flowerCountElement.className = "flower-count";
+        flowerCountElement.textContent = count > 0 ? `已有 ${count} 朵花` : "";
+        button.appendChild(flowerCountElement);
+      });
+
+      tributeButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const catId = this.dataset.catId;
+          flowerCounts[catId] = (flowerCounts[catId] || 0) + 1;
+
+          // 更新花朵计数显示
+          const flowerCountElement = this.querySelector('.flower-count');
+          flowerCountElement.textContent = `已有 ${flowerCounts[catId]} 朵花`;
+
+          // 创建花朵动画
+          const catCard = document.getElementById(catId);
+          const flower = document.createElement("div");
+          flower.className = "flower";
+          flower.innerHTML = "🌹";
+          flower.style.position = "absolute";
+          flower.style.fontSize = "24px";
+          flower.style.left = `${Math.random() * 80 + 10}%`;
+          flower.style.top = `${Math.random() * 40 + 30}%`;
+          flower.style.opacity = "0";
+          flower.style.transform = "translateY(20px)";
+          flower.style.transition = "all 1.5s ease";
+          catCard.appendChild(flower);
+
+          setTimeout(() => {
+            flower.style.opacity = "1";
+            flower.style.transform = "translateY(0)";
+          }, 100);
+
+          setTimeout(() => {
+            flower.style.opacity = "0";
+            setTimeout(() => {
+              flower.remove();
+            }, 1500);
+          }, 3000);
+        });
+      });
+
+      shareButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const catId = this.dataset.catId;
+          const catCard = document.getElementById(catId);
+          const memoriesContainer = document.getElementById(`memories-container-${catId}`);
+
+          const memoryText = prompt("请分享您的回忆:", "");
+          if (memoryText && memoryText.trim() !== "") {
+            const memoryElement = document.createElement("div");
+            memoryElement.className = "shared-memory";
+
+            const memoryContent = document.createElement("p");
+            memoryContent.className = "memory-content";
+            memoryContent.textContent = memoryText;
+
+            const memoryTime = document.createElement("small");
+            memoryTime.className = "memory-time";
+            memoryTime.textContent = new Date().toLocaleString();
+
+            memoryElement.appendChild(memoryContent);
+            memoryElement.appendChild(memoryTime);
+
+            memoriesContainer.appendChild(memoryElement);
+
+            // 保存回忆到本地存储
+            saveMemory(catId, memoryText, new Date().toLocaleString());
+          }
+        });
+      });
+
+      // 从本地存储加载回忆
+      function loadMemories() {
+        const memorialCards = document.querySelectorAll('.cat-card.memorial');
+        memorialCards.forEach(card => {
+          const catId = card.id;
+          const memories = JSON.parse(localStorage.getItem(`memories-${catId}`)) || [];
+          const memoriesContainer = document.getElementById(`memories-container-${catId}`);
+
+          memories.forEach(memory => {
+            const memoryElement = document.createElement("div");
+            memoryElement.className = "shared-memory";
+
+            const memoryContent = document.createElement("p");
+            memoryContent.className = "memory-content";
+            memoryContent.textContent = memory.text;
+
+            const memoryTime = document.createElement("small");
+            memoryTime.className = "memory-time";
+            memoryTime.textContent = memory.time;
+
+            memoryElement.appendChild(memoryContent);
+            memoryElement.appendChild(memoryTime);
+
+            memoriesContainer.appendChild(memoryElement);
+          });
+        });
+      }
+
+      // 保存回忆到本地存储
+      function saveMemory(catId, text, time) {
+        const memories = JSON.parse(localStorage.getItem(`memories-${catId}`)) || [];
+        memories.push({ text, time });
+        localStorage.setItem(`memories-${catId}`, JSON.stringify(memories));
+      }
+
+      // 加载保存的回忆
+      loadMemories();
+    });
+  </script>
+</body>
+
+</html>
