@@ -2,9 +2,9 @@
 <html lang="zh-CN">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>猫咪领养平台 - 首页</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>猫咪领养平台UI预览</title>
   <style>
     * {
       margin: 0;
@@ -14,55 +14,109 @@
     }
 
     body {
-      background-color: #f5f5f5;
-      color: #333;
+      background-color: #1e1e1e;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding-bottom: 80px;
     }
 
-    header {
+    .container {
+      display: flex;
+      gap: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .phone-container {
+      background-color: #2c2c2c;
+      border-radius: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      padding: 15px;
+      width: 360px;
+      height: 700px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phone-header {
+      height: 60px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 15px 0;
-      margin-bottom: 20px;
+      padding: 0 10px;
+      background-color: #333;
+      border-radius: 20px 20px 0 0;
+      color: white;
     }
 
-    .logo {
-      font-size: 24px;
+    .phone-title {
+      font-size: 18px;
       font-weight: bold;
-      color: #333;
     }
 
-    .nav-buttons {
+    .phone-icons {
       display: flex;
       gap: 15px;
     }
 
-    .nav-button {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: #fff;
+    .phone-icon {
+      width: 32px;
+      height: 32px;
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .phone-content {
+      height: calc(100% - 60px);
+      background-color: #f5f5f5;
+      border-radius: 0 0 20px 20px;
+      overflow-y: auto;
+      padding: 0;
+      color: #333;
+    }
+
+    /* 首页样式 */
+    .filter-container {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 15px 15px 5px;
+      margin-bottom: 10px;
+    }
+
+    .filter-button {
+      padding: 8px 15px;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      font-size: 14px;
+      white-space: nowrap;
       cursor: pointer;
     }
 
+    .filter-button.active {
+      background-color: #ff6b6b;
+      color: white;
+      border-color: #ff6b6b;
+    }
+
     .section-title {
-      font-size: 20px;
-      margin-bottom: 15px;
+      font-size: 18px;
+      margin: 15px 15px 10px;
       font-weight: bold;
     }
 
     .cat-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      padding: 0 15px 15px;
     }
 
     .cat-thumbnail {
@@ -70,23 +124,17 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .cat-thumbnail:hover {
-      transform: translateY(-5px);
+      position: relative;
     }
 
     .thumbnail-image {
       width: 100%;
-      height: 180px;
+      height: 130px;
       object-fit: cover;
-      border-radius: 12px 12px 0 0;
     }
 
     .thumbnail-info {
-      padding: 12px;
+      padding: 10px;
     }
 
     .thumbnail-name {
@@ -95,22 +143,308 @@
     }
 
     .thumbnail-brief {
-      font-size: 14px;
+      font-size: 12px;
       color: #666;
       display: flex;
       justify-content: space-between;
     }
 
+    .status-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 4px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      color: white;
+      background-color: #ff6b6b;
+    }
+
+    .status-badge.adopted {
+      background-color: #4caf50;
+    }
+
+    .status-badge.stray {
+      background-color: #ff9800;
+    }
+
+    /* 底部导航 */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #666;
+      font-size: 12px;
+    }
+
+    .nav-item.active {
+      color: #ff6b6b;
+    }
+
+    .nav-icon {
+      margin-bottom: 5px;
+      font-size: 20px;
+    }
+
+    /* 详情页样式 */
+    .back-button {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .share-button {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .cat-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .cat-info-container {
+      background-color: white;
+      border-radius: 20px;
+      margin: 15px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .cat-name {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .cat-description {
+      font-size: 14px;
+      color: #555;
+      margin: 15px 0;
+      line-height: 1.5;
+    }
+
+    .cat-info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .cat-info-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cat-info-label {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .cat-info-value {
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .primary-button {
+      flex: 2;
+      background-color: #ff6b6b;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .secondary-button {
+      flex: 1;
+      background-color: #f0f0f0;
+      color: #333;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    /* 回忆墙样式 */
+    .memorial-header {
+      text-align: center;
+      padding: 20px 15px;
+    }
+
+    .memorial-title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .memorial-subtitle {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .memorial-cat {
+      background-color: #f0f0f0;
+      margin: 15px;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .memorial-cat-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      filter: grayscale(100%);
+    }
+
+    .memorial-cat-info {
+      padding: 15px;
+    }
+
+    .memorial-cat-name {
+      font-size: 18px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .memorial-badge {
+      background-color: #777;
+      color: white;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      margin-left: 10px;
+    }
+
+    .responsive-hide {
+      display: block;
+    }
+
+    @media (max-width: 1200px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .responsive-hide {
+        display: none;
+      }
+    }
+
+    /* 轮播图样式 */
+    .carousel {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      overflow: hidden;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .carousel-container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s ease;
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+    }
+
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-dot.active {
+      background-color: white;
+      transform: scale(1.2);
+    }
+
+    /* 搜索框样式 */
+    .search-box {
+      background: white;
+      border-radius: 12px;
+      padding: 12px 15px;
+      margin: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .search-input::placeholder {
+      color: #999;
+    }
+
     /* 搜索对话框样式 */
     .search-modal {
-      display: none;
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
       z-index: 1000;
+      display: flex;
       justify-content: center;
       align-items: center;
     }
@@ -122,6 +456,7 @@
       width: 90%;
       max-width: 500px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      margin: 20px;
     }
 
     .search-header {
@@ -141,6 +476,7 @@
       border: none;
       cursor: pointer;
       font-size: 24px;
+      color: #333;
     }
 
     .search-form {
@@ -200,381 +536,386 @@
       color: white;
     }
 
-    /* 底部导航样式 */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: white;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-decoration: none;
-      color: #666;
-    }
-
-    .nav-item.active {
-      color: #ff6b6b;
-    }
-
-    .nav-icon {
-      margin-bottom: 5px;
-    }
-
-    .nav-text {
-      font-size: 12px;
-    }
-
-    /* 筛选器样式 */
-    .filter-container {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding: 10px 0;
-      margin-bottom: 20px;
-    }
-
-    .filter-button {
-      padding: 8px 15px;
-      background-color: white;
-      border: 1px solid #ddd;
-      border-radius: 20px;
+    .advanced-search-button {
+      padding: 8px 12px;
+      background-color: #f0f0f0;
+      border: none;
+      border-radius: 8px;
       font-size: 14px;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-
-    .filter-button.active {
-      background-color: #ff6b6b;
-      color: white;
-      border-color: #ff6b6b;
-    }
-
-    .status-badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 5px 10px;
-      border-radius: 10px;
-      font-size: 12px;
-      color: white;
-      background-color: #ff6b6b;
-    }
-
-    .status-badge.adopted {
-      background-color: #4caf50;
-    }
-
-    .status-badge.stray {
-      background-color: #ff9800;
-    }
-
-    .cat-thumbnail {
-      position: relative;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 40px 0;
       color: #666;
-    }
-
-    .empty-state img {
-      width: 100px;
-      height: 100px;
-      margin-bottom: 20px;
-      opacity: 0.5;
-    }
-
-    @media (max-width: 768px) {
-      .cat-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      }
+      cursor: pointer;
+      white-space: nowrap;
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="logo">猫咪领养平台</div>
-    <div class="nav-buttons">
-      <div class="nav-button" id="searchButton">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
-            stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M21 21L16.65 16.65" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+  <div class="container">
+    <!-- 首页 -->
+    <div class="phone-container">
+      <div class="phone-header">
+        <div class="phone-title">探索猫咪</div>
+        <div class="phone-icons">
+          <div class="phone-icon">🔔</div>
+          <div class="phone-icon">⚙️</div>
+        </div>
+      </div>
+      <div class="phone-content">
+        <div class="search-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+              stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M21 21L16.65 16.65" stroke="#999" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <input type="text" class="search-input" placeholder="搜索猫咪...">
+          <button class="advanced-search-button">高级搜索</button>
+        </div>
+
+        <div class="filter-container">
+          <button class="filter-button active">全部</button>
+          <button class="filter-button">待领养</button>
+          <button class="filter-button">已领养</button>
+          <button class="filter-button">流浪中</button>
+          <button class="filter-button">已离世</button>
+        </div>
+
+        <h2 class="section-title">推荐领养</h2>
+        <div class="cat-grid">
+          <div class="cat-thumbnail">
+            <div class="status-badge">待领养</div>
+            <img
+              src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+              alt="橘猫" class="thumbnail-image">
+            <div class="thumbnail-info">
+              <div class="thumbnail-name">小橘</div>
+              <div class="thumbnail-brief">
+                <span>公</span>
+                <span>1岁</span>
+              </div>
+            </div>
+          </div>
+          <div class="cat-thumbnail">
+            <div class="status-badge adopted">已领养</div>
+            <img
+              src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+              alt="银渐层" class="thumbnail-image">
+            <div class="thumbnail-info">
+              <div class="thumbnail-name">小银</div>
+              <div class="thumbnail-brief">
+                <span>母</span>
+                <span>2岁</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="section-title">校园流浪猫</h2>
+        <div class="cat-grid">
+          <div class="cat-thumbnail">
+            <div class="status-badge stray">流浪中</div>
+            <img
+              src="https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+              alt="橘白猫" class="thumbnail-image">
+            <div class="thumbnail-info">
+              <div class="thumbnail-name">大橘</div>
+              <div class="thumbnail-brief">
+                <span>公</span>
+                <span>4岁</span>
+              </div>
+            </div>
+          </div>
+          <div class="cat-thumbnail">
+            <div class="status-badge stray">流浪中</div>
+            <img
+              src="https://images.unsplash.com/photo-1519052537078-e6302a4968d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+              alt="灰猫" class="thumbnail-image">
+            <div class="thumbnail-info">
+              <div class="thumbnail-name">小灰</div>
+              <div class="thumbnail-brief">
+                <span>公</span>
+                <span>2岁</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height: 60px;"></div>
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+          <div class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <span>首页</span>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🕒</div>
+            <span>详情</span>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">💖</div>
+            <span>回忆墙</span>
+          </div>
+        </div>
       </div>
     </div>
-  </header>
 
-  <main>
-    <div class="filter-container">
-      <button class="filter-button active">全部</button>
-      <button class="filter-button">待领养</button>
-      <button class="filter-button">已领养</button>
-      <button class="filter-button">流浪中</button>
-      <button class="filter-button">已离世</button>
+    <!-- 详情页 -->
+    <div class="phone-container">
+      <div class="phone-header">
+        <div class="back-button">←</div>
+        <div class="phone-title">猫咪详情</div>
+        <div class="share-button">⇨</div>
+      </div>
+      <div class="phone-content">
+        <div class="carousel">
+          <div class="carousel-container">
+            <div class="carousel-slide">
+              <img
+                src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                alt="小橘照片1">
+            </div>
+            <div class="carousel-slide">
+              <img
+                src="https://images.unsplash.com/photo-1606214174585-fe31582dc6ee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                alt="小橘照片2">
+            </div>
+            <div class="carousel-slide">
+              <img
+                src="https://images.unsplash.com/photo-1594063596316-47f01ae9d090?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                alt="小橘照片3">
+            </div>
+          </div>
+          <div class="carousel-dots">
+            <div class="carousel-dot active"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
+          </div>
+        </div>
+
+        <div class="cat-info-container">
+          <h1 class="cat-name">小橘</h1>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">毛色：</span>
+              <span class="info-value">橘</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">性别：</span>
+              <span class="info-value">公</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">状况：</span>
+              <span class="info-value">待领养</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">绝育情况：</span>
+              <span class="info-value">已绝育</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">绝育时间：</span>
+              <span class="info-value">2023-05-15</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">外貌：</span>
+              <span class="info-value">中等体型 橘黄色 黄眼睛</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">性格：</span>
+              <span class="info-value">亲人 喜欢玩耍</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">首次目击：</span>
+              <span class="info-value">2022-12</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">出没地点：</span>
+              <span class="info-value">教学楼旁</span>
+            </div>
+          </div>
+
+          <div class="cat-description">
+            小橘是一只活泼好动的橘猫，性格非常友善，喜欢与人互动。它有着明亮的眼睛和光滑的毛发，非常健康。小橘很喜欢玩逗猫棒和毛线球，也很享受被抚摸。它已经完成了疫苗接种和绝育手术，正在寻找一个温暖的家庭收养。
+          </div>
+
+          <div class="action-buttons">
+            <button class="primary-button">我要领养</button>
+            <button class="secondary-button">收藏</button>
+          </div>
+        </div>
+
+        <div style="height: 60px;"></div>
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+          <div class="nav-item">
+            <div class="nav-icon">🏠</div>
+            <span>首页</span>
+          </div>
+          <div class="nav-item active">
+            <div class="nav-icon">🕒</div>
+            <span>详情</span>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">💖</div>
+            <span>回忆墙</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <h2 class="section-title">推荐领养</h2>
-    <div class="cat-grid">
-      <div class="cat-thumbnail" data-id="cat1">
-        <div class="status-badge">待领养</div>
-        <img
-          src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-          alt="橘猫" class="thumbnail-image" />
-        <div class="thumbnail-info">
-          <div class="thumbnail-name">小橘</div>
-          <div class="thumbnail-brief">
-            <span>公</span>
-            <span>1岁</span>
-          </div>
+    <!-- 回忆墙 -->
+    <div class="phone-container responsive-hide">
+      <div class="phone-header">
+        <div class="phone-title">回忆墙</div>
+        <div class="phone-icons">
+          <div class="phone-icon">🔍</div>
         </div>
       </div>
-      <div class="cat-thumbnail" data-id="cat2">
-        <div class="status-badge adopted">已领养</div>
-        <img
-          src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-          alt="银渐层" class="thumbnail-image" />
-        <div class="thumbnail-info">
-          <div class="thumbnail-name">小银</div>
-          <div class="thumbnail-brief">
-            <span>母</span>
-            <span>2岁</span>
+      <div class="phone-content">
+        <div class="memorial-header">
+          <h1 class="memorial-title">永恒的记忆</h1>
+          <p class="memorial-subtitle">纪念那些曾经带给我们温暖和欢乐的小生命</p>
+        </div>
+
+        <div class="memorial-cat">
+          <img class="memorial-cat-image"
+            src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            alt="小黑">
+          <div class="memorial-cat-info">
+            <div class="memorial-cat-name">
+              小黑 <span class="memorial-badge">已离世</span>
+            </div>
+            <div class="cat-description">
+              小黑是一只性格有些怕生的黑猫，但是一旦熟悉了就会变得很亲近。它喜欢安静的环境，曾经是校园里最受欢迎的猫咪之一。2023年9月15日，小黑因病离世，永远离开了我们，但它的记忆将永远留在大家心中。
+            </div>
+            <div class="action-buttons">
+              <button class="primary-button">献花悼念</button>
+              <button class="secondary-button">分享回忆</button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="cat-thumbnail" data-id="cat3">
-        <div class="status-badge">待领养</div>
-        <img
-          src="https://images.unsplash.com/photo-1592194996308-7b43878e84a6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-          alt="三花猫" class="thumbnail-image" />
-        <div class="thumbnail-info">
-          <div class="thumbnail-name">花花</div>
-          <div class="thumbnail-brief">
-            <span>母</span>
-            <span>3岁</span>
+
+        <div style="height: 60px;"></div>
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+          <div class="nav-item">
+            <div class="nav-icon">🏠</div>
+            <span>首页</span>
           </div>
-        </div>
-      </div>
-      <div class="cat-thumbnail" data-id="cat4">
-        <div class="status-badge stray">流浪中</div>
-        <img
-          src="https://images.unsplash.com/photo-1561948955-570b270e7c36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-          alt="黑白猫" class="thumbnail-image" />
-        <div class="thumbnail-info">
-          <div class="thumbnail-name">奶牛</div>
-          <div class="thumbnail-brief">
-            <span>公</span>
-            <span>1.5岁</span>
+          <div class="nav-item">
+            <div class="nav-icon">🕒</div>
+            <span>详情</span>
+          </div>
+          <div class="nav-item active">
+            <div class="nav-icon">💖</div>
+            <span>回忆墙</span>
           </div>
         </div>
       </div>
     </div>
 
-    <h2 class="section-title" style="margin-top: 30px;">校园流浪猫</h2>
-    <div class="cat-grid">
-      <div class="cat-thumbnail" data-id="cat5">
-        <div class="status-badge stray">流浪中</div>
-        <img
-          src="https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-          alt="橘白猫" class="thumbnail-image" />
-        <div class="thumbnail-info">
-          <div class="thumbnail-name">大橘</div>
-          <div class="thumbnail-brief">
-            <span>公</span>
-            <span>4岁</span>
-          </div>
+    <!-- 添加第四个手机容器来展示高级搜索弹窗 -->
+    <div class="phone-container">
+      <div class="phone-header">
+        <div class="phone-title">高级搜索</div>
+        <div class="phone-icons">
+          <div class="phone-icon">🔔</div>
+          <div class="phone-icon">⚙️</div>
         </div>
       </div>
-      <div class="cat-thumbnail" data-id="cat6">
-        <div class="status-badge stray">流浪中</div>
-        <img
-          src="https://images.unsplash.com/photo-1519052537078-e6302a4968d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-          alt="灰猫" class="thumbnail-image" />
-        <div class="thumbnail-info">
-          <div class="thumbnail-name">小灰</div>
-          <div class="thumbnail-brief">
-            <span>公</span>
-            <span>2岁</span>
+      <div class="phone-content">
+        <div class="search-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+              stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M21 21L16.65 16.65" stroke="#999" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <input type="text" class="search-input" placeholder="搜索猫咪...">
+          <button class="advanced-search-button">高级搜索</button>
+        </div>
+
+        <div class="search-modal" style="position: relative; background: none; display: flex;">
+          <div class="search-container">
+            <div class="search-header">
+              <div class="search-title">高级搜索</div>
+              <button class="close-button">&times;</button>
+            </div>
+            <form class="search-form">
+              <div class="form-group">
+                <label class="form-label">猫咪名称</label>
+                <input type="text" class="form-input" placeholder="输入猫咪名称" name="name" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">毛色</label>
+                <select class="form-select" name="color">
+                  <option value="">全部</option>
+                  <option value="黑">黑色</option>
+                  <option value="白">白色</option>
+                  <option value="橘">橘色</option>
+                  <option value="三花">三花</option>
+                  <option value="银渐层">银渐层</option>
+                  <option value="黑白">黑白</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">性别</label>
+                <select class="form-select" name="gender">
+                  <option value="">全部</option>
+                  <option value="公">公</option>
+                  <option value="母">母</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">绝育情况</label>
+                <select class="form-select" name="neutered">
+                  <option value="">全部</option>
+                  <option value="已绝育">已绝育</option>
+                  <option value="未绝育">未绝育</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">猫咪状态</label>
+                <select class="form-select" name="status">
+                  <option value="">全部</option>
+                  <option value="待领养">待领养</option>
+                  <option value="已领养">已领养</option>
+                  <option value="流浪">流浪</option>
+                  <option value="已离世">已离世</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">性格特点</label>
+                <input type="text" class="form-input" placeholder="如：亲人、怕生等" name="personality" />
+              </div>
+              <div class="search-buttons">
+                <button type="reset" class="search-button search-reset">重置</button>
+                <button type="submit" class="search-button search-submit">搜索</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div style="height: 60px;"></div>
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+          <div class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <span>首页</span>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🕒</div>
+            <span>详情</span>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">💖</div>
+            <span>回忆墙</span>
           </div>
         </div>
       </div>
     </div>
-  </main>
-
-  <!-- 底部导航 -->
-  <div class="bottom-nav">
-    <a href="index.html" class="nav-item active">
-      <div class="nav-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" />
-        </svg>
-      </div>
-      <span class="nav-text">首页</span>
-    </a>
-    <a href="detail.html" class="nav-item">
-      <div class="nav-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" />
-          <path d="M12 8v4l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </div>
-      <span class="nav-text">详情</span>
-    </a>
-    <a href="memorial.html" class="nav-item">
-      <div class="nav-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </div>
-      <span class="nav-text">回忆墙</span>
-    </a>
   </div>
-
-  <!-- 搜索对话框 -->
-  <div class="search-modal" id="searchModal">
-    <div class="search-container">
-      <div class="search-header">
-        <div class="search-title">高级搜索</div>
-        <button class="close-button" id="closeSearch">&times;</button>
-      </div>
-      <form class="search-form" id="searchForm">
-        <div class="form-group">
-          <label class="form-label">猫咪名称</label>
-          <input type="text" class="form-input" placeholder="输入猫咪名称" name="name" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">毛色</label>
-          <select class="form-select" name="color">
-            <option value="">全部</option>
-            <option value="黑">黑色</option>
-            <option value="白">白色</option>
-            <option value="橘">橘色</option>
-            <option value="三花">三花</option>
-            <option value="银渐层">银渐层</option>
-            <option value="黑白">黑白</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">性别</label>
-          <select class="form-select" name="gender">
-            <option value="">全部</option>
-            <option value="公">公</option>
-            <option value="母">母</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">绝育情况</label>
-          <select class="form-select" name="neutered">
-            <option value="">全部</option>
-            <option value="已绝育">已绝育</option>
-            <option value="未绝育">未绝育</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">猫咪状态</label>
-          <select class="form-select" name="status">
-            <option value="">全部</option>
-            <option value="待领养">待领养</option>
-            <option value="已领养">已领养</option>
-            <option value="流浪">流浪</option>
-            <option value="已离世">已离世</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">性格特点</label>
-          <input type="text" class="form-input" placeholder="如：亲人、怕生等" name="personality" />
-        </div>
-        <div class="search-buttons">
-          <button type="reset" class="search-button search-reset">
-            重置
-          </button>
-          <button type="submit" class="search-button search-submit">
-            搜索
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // 搜索功能
-      const searchButton = document.getElementById("searchButton");
-      const searchModal = document.getElementById("searchModal");
-      const closeSearch = document.getElementById("closeSearch");
-      const searchForm = document.getElementById("searchForm");
-
-      searchButton.addEventListener("click", function () {
-        searchModal.style.display = "flex";
-      });
-
-      closeSearch.addEventListener("click", function () {
-        searchModal.style.display = "none";
-      });
-
-      searchModal.addEventListener("click", function (event) {
-        if (event.target === searchModal) {
-          searchModal.style.display = "none";
-        }
-      });
-
-      searchForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const formData = new FormData(searchForm);
-        const searchParams = {};
-
-        for (const [key, value] of formData.entries()) {
-          if (value) {
-            searchParams[key] = value;
-          }
-        }
-
-        console.log("搜索参数:", searchParams);
-        alert("搜索功能已触发，请查看控制台获取搜索参数");
-        searchModal.style.display = "none";
-      });
-
-      // 筛选功能
-      const filterButtons = document.querySelectorAll('.filter-button');
-      filterButtons.forEach(button => {
-        button.addEventListener('click', function () {
-          filterButtons.forEach(btn => btn.classList.remove('active'));
-          this.classList.add('active');
-
-          // 这里可以添加根据筛选条件过滤猫咪列表的逻辑
-          const filterText = this.textContent;
-          console.log(`筛选条件: ${filterText}`);
-        });
-      });
-
-      // 猫咪卡片点击事件
-      const catCards = document.querySelectorAll('.cat-thumbnail');
-      catCards.forEach(card => {
-        card.addEventListener('click', function () {
-          const catId = this.dataset.id;
-          window.location.href = `detail.html?id=${catId}`;
-        });
-      });
-    });
-  </script>
 </body>
 
 </html>
